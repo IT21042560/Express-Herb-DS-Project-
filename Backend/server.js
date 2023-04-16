@@ -25,3 +25,6 @@ connection.once("open", ()=>{
 app.listen(PORT, () =>{
     console.log(`Server is up and running on port ${PORT}`)
 })
+
+const product = require("./routes/Product-routes");
+app.use('/Product', product);
