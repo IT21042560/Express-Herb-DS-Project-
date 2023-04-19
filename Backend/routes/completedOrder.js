@@ -1,5 +1,4 @@
 const router = require("express").Router();
-
 let completedItem = require("../moduls/completedOrder");
 
 
@@ -43,6 +42,7 @@ router.route("/delete/:id").delete(async (req,res) =>{
 })
 
 router.route("/get").get((req,res) =>{
+
     completedItem.find().then((order)=>{
         res.json(order)
     }).catch((err) =>{

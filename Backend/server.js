@@ -4,9 +4,10 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const app = express();
+const requireSignin =require('./middleware/auth')
 
 
-require("dotenv").config();
+dotenv.config();
 
 const PORT = process.env.PORT || 8040
 
@@ -33,3 +34,6 @@ app.use("/orderedItemRoute", orderedItemRoute);
 
 const completedOrderItem = require("./routes/completedOrder.js");
 app.use("/completedOrder", completedOrderItem);
+
+const admin = require('./routes/AdminRoutes.js');
+app.use("/Admin",admin);
