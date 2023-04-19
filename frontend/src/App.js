@@ -1,36 +1,18 @@
-import './App.css';
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import AllOrdered from './component/orderedItems';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import UpdatedOrdred from './component/updateOrdered';
-import CompletedItems from './component/completedItems';
-import OrderTraking from './component/orderTracking';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import AddProduct from "./component/AddProduct";
+import ViewProduct from "./component/ViewProduct";
+import UpdateProduct from "./component/UpdateProduct";
+import Home from "./component/Home";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-            <Route
-              path="/orderedItems"
-              element={<AllOrdered />}
-            />
-
-            <Route
-              path="/update/:id"
-              element={<UpdatedOrdred />}
-            />
-
-            <Route
-              path="/CompletedItems"
-              element={<CompletedItems />}
-            />
-
-            <Route
-              path="/OrderTraking"
-              element={<OrderTraking />}
-            />
-
+        <Route path="/AddProduct" element={<AddProduct />} />
+        <Route path="/ViewProduct" element={<ViewProduct />} />
+        <Route path="/UpdateProduct/:id" element={<UpdateProduct />} />
+        <Route path="/Home" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

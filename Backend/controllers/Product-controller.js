@@ -7,34 +7,30 @@ var fs = require("fs");
 var path = require("path");
 var app = express();
 
-// var storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "uploads");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, file.fieldname + "-" + Date.now());
-//   },
-// });
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now());
+  },
+});
 
-// var upload = multer({ storage: storage });
+var upload = multer({ storage: storage });
 
 const addProduct = async (req, res) => {
   const name = req.body.name;
-  const price = req.body.price;
+  const price = Number(req.body.price);
   const catogory = req.body.catogory;
   const description = req.body.description;
-  const image = {
-    data: fs.readFileSync(
-      path.join(__dirname + "/uploads/" + req.file.filename)
-    ),
-    contentType: "image/png",
-  };
+  const quantity = Number(req.body.quantity);
+
   const newProduct = new Product({
     name,
     price,
     catogory,
     description,
-    image,
+    quantity,
   });
   newProduct
     .save()
@@ -44,27 +40,74 @@ const addProduct = async (req, res) => {
     .catch((err) => {
       console.log(err);
     });
-  // app.post("/", upload.single("image"), (req, res, next) => {
-  //   var obj = {
-  //     name: req.body.name,
-  //     price: req.body.price,
-  //     catogory: req.body.catogory,
-  //     description: req.body.description,
-  //     img: {
-  //       data: fs.readFileSync(
-  //         path.join(__dirname + "/uploads/" + req.file.filename)
-  //       ),
-  //       contentType: "image/png",
-  //     },
-  //   };
-  //   Product.create(obj).then((err, item) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       // item.save();
-  //       res.redirect("/");
-  //     }
-  //   });
-  // });
 };
+
+const viewProducts = async (req, res, next) => {
+  Product.find()
+    .then((Product) => {
+      res.json(Product);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const updateProduct = async (req, res) => {
+  let userId = req.params.id;
+  // const name = req.body.name;
+  const { name, price, catogory, description, quantity } = req.body;
+
+  const updateProduct = {
+    name,
+    price,
+    catogory,
+    description,
+    quantity,
+  };
+  const update = await Product.findByIdAndUpdate(userId, updateProduct)
+    .then(() => {
+      res.status(200).send({ status: "Product updated " });
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(500)
+        .send({ status: "Error with updating data", error: err.message });
+    });
+
+  // return res.status(201).json({updateDrivers })
+};
+const deleteProduct = async (req, res) => {
+  let userId = req.params.id;
+  await Product.findByIdAndDelete(userId)
+    .then(() => {
+      res.status(200).send({ status: "Product deleted" });
+    })
+    .catch((err) => {
+      console.log(err.message);
+      res
+        .status(500)
+        .send({ status: "Error with delete Product", error: err.message });
+    });
+};
+
+const getProductById = async (req, res) => {
+  let id = req.params.id;
+  await Product.findById(id)
+    .then((response) => {
+      res.status(200).json(response);
+      console.log(res);
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .send({ status: "Error with get product", error: err.message });
+    });
+};
+
 exports.addProduct = addProduct;
+exports.viewProducts = viewProducts;
+exports.updateProduct = updateProduct;
+exports.deleteProduct = deleteProduct;
+exports.getProductById = getProductById;
+//module.exports= router;
