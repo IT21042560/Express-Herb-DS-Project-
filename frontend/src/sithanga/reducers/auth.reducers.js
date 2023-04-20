@@ -2,6 +2,7 @@ import { authConstants } from "../actions/constants";
 
 const initiateState ={
     user: {},
+    admins:[],
     error: null,
     message: '',
     authenticated: false,
@@ -46,7 +47,9 @@ export default(state = initiateState,action)=> {
             state={
                 ...state,
                 loading:false,
-                payload:action.payload.message
+                payload:action.payload.message,
+                user:action.payload,
+                admins:action.payload
             }
             break
         case authConstants.SIGN_UP_FAILURE:
@@ -70,6 +73,26 @@ export default(state = initiateState,action)=> {
             }
             break
         case authConstants.LOGOUT_FAILED:
+            state={
+                ...state,
+                loading:false
+            }
+            break
+        case authConstants.GET_ALL_REQUEST:
+            state={
+                ...state,
+                loading:true
+            }
+            break
+        case authConstants.GET_ALL_SUCCESS:
+            state={
+                ...state,
+                loading:false,
+                admins:action.payload,
+                payload:action.payload
+            }
+            break
+        case authConstants.GET_ALL_FAILURE:
             state={
                 ...state,
                 loading:false

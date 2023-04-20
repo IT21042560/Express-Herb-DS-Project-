@@ -118,3 +118,24 @@ export const signout = () => {
 
     }
 }
+
+export const getAll =() => {
+    return async(dispatch) => {
+        dispatch({type:authConstants.GET_ALL_REQUEST})
+        const res = await axiosInstance.get("/Admin/admins")
+
+        if(res.status === 200){
+            console.log("action eke" + res.data.payload)
+            toast.success("Admin data fetched sucessfully..!",{
+                id:'fetched success'
+            })
+            dispatch({
+                type: authConstants.GET_ALL_SUCCESS,
+                payload: res.data.payload
+            })
+        }
+        else{
+            dispatch({type: authConstants.GET_ALL_FAILURE})
+        }
+    }
+}

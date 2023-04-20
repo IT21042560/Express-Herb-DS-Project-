@@ -153,10 +153,10 @@ exports.Signout = (req, res) => {
 exports.getAllAdmins = async (req, res) => {
   try {
     const allAdmins = await admin.find();
-    if (allAdmins) {
+    if(allAdmins){
       res.status(200).json({
-        message: "Fetched Successfull..!",
-        payload: allAdmins
+        message:"Fetched sucessfull..!",
+        payload:allAdmins
       })
     }
   }catch(error){

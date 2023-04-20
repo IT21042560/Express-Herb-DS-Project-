@@ -22,7 +22,7 @@ router.post('/Signup',upload.single('ProfilePicture'),AdminRegister);
 router.post('/Signin',Signin);
 router.delete('/Signout',Signout);
 router.post('/Token',tokenRefresh);
-router.get("/admins",requireSignin, getAllAdmins);
+router.get('/admins', getAllAdmins);
 
 
 module.exports = router
