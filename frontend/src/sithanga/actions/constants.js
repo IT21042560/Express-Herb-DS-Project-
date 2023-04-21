@@ -15,3 +15,10 @@ export const authConstants = {
     DELETE_SUCCESS: "DELETE_SUCCESS",
     DELETE_FAILURE: "DELETE_FAILURE",
 }
+
+export const cartConstant ={
+    GET_CART_REQUEST : 'GET_CART_REQUEST',
+    GET_CART_SUCCESS : 'GET_CART_SUCCESS',
+    GET_CART_FAILURE : 'GET_CART_FAILURE',
+
+}

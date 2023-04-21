@@ -37,3 +37,6 @@ app.use("/completedOrder", completedOrderItem);
 
 const admin = require('./routes/AdminRoutes.js');
 app.use("/Admin",admin);
+
+const cart = require('./routes/cartRoutes');
+app.use("/Cart",cart);

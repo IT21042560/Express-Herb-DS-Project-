@@ -1,4 +1,3 @@
-const { response } = require('express');
 const admin = require('../moduls/AdminModels')
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');

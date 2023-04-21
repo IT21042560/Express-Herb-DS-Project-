@@ -1,7 +1,7 @@
-const mongoose = require("mongoose")
-const Schema = mongoose.Schema()
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
 
-const Cart = new Schema({
+const CartSchema = new Schema({
 
     Order_ID: {
         type: String,
@@ -29,16 +29,15 @@ const Cart = new Schema({
         lowercase: true
     },
     Total_Amount: {
-        type: mongoose.Types.Decimal128,
+        type: String,
         required: true,
     },
     Delivary: {
         type: String,
         required: true,
     },
-    Total_Amount: {
-        type: mongoose.Types.Decimal128,
-        required: true,
-    },
+
 },{timestamps:true})
+
+module.exports = mongoose.model("Cart",CartSchema);
 
