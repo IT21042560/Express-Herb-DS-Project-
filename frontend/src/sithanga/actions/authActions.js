@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast'
 
 
 export const Login = (user) => {
+    console.log(user)
     return async (dispatch) => {
 
         dispatch({ type: authConstants.LOGIN_REQUEST })
@@ -27,20 +28,20 @@ export const Login = (user) => {
                 }
             })
         }
-        else {
-            if (res.response.status === 401) {
-                toast.error("Invalid Password..!")
-                dispatch({
-                    type: authConstants.LOGIN_FALIURE
-                })
-            }
-            else if (res.status === 404) {
-                toast.error("Invalid Email Address..!")
-                dispatch({
-                    type: authConstants.LOGIN_FALIURE
-                })
-            }
+
+        else if (res.status === 401) {
+            toast.error("Invalid Password..!")
+            dispatch({
+                type: authConstants.LOGIN_FALIURE
+            })
         }
+        else if (res.status === 404) {
+            toast.error("Invalid Email Address..!")
+            dispatch({
+                type: authConstants.LOGIN_FALIURE
+            })
+        }
+
 
     }
 }
@@ -69,16 +70,24 @@ export const isLoggedIn = () => {
     }
 }
 
-export const SignUp = (user) => {
+export const SignUp = (user,log) => {
     console.log(user)
     return async (dispatch) => {
 
         dispatch({ type: authConstants.SIGN_UP_REQUEST })
         const res = await axiosInstance.post('/Admin/Signup', user)
         if (res.status === 201) {
-            toast.success(`SignUp Success, Welcome ${user.fullName}`, {
+            toast.success(`SignUp Success, Welcome ${user.Full_Name}`, {
                 id: "signup"
             })
+            const email = log.Admin_Email
+            const pwd = log.Password
+            const form3 ={
+                Admin_Email : email,
+                Password : pwd
+            }
+            console.log(form3)
+            dispatch(Login(form3))
             dispatch({
                 type: authConstants.SIGN_UP_SUCCESS,
                 payload: res.data.payload
@@ -119,23 +128,56 @@ export const signout = () => {
     }
 }
 
-export const getAll =() => {
-    return async(dispatch) => {
-        dispatch({type:authConstants.GET_ALL_REQUEST})
+export const getAll = () => {
+    return async (dispatch) => {
+        dispatch({ type: authConstants.GET_ALL_REQUEST })
         const res = await axiosInstance.get("/Admin/admins")
 
-        if(res.status === 200){
-            console.log("action eke" + res.data.payload)
-            toast.success("Admin data fetched sucessfully..!",{
-                id:'fetched success'
+        if (res.status === 200) {
+
+            toast.success("Admin data fetched sucessfully..!", {
+                id: 'fetched success'
             })
             dispatch({
                 type: authConstants.GET_ALL_SUCCESS,
                 payload: res.data.payload
             })
         }
-        else{
-            dispatch({type: authConstants.GET_ALL_FAILURE})
+        else {
+            dispatch({ type: authConstants.GET_ALL_FAILURE })
+        }
+    }
+}
+
+export const deleteAdmin = (id) => {
+    console.log("cosssssssssssss" + id)
+
+    return async (dispatch) => {
+        dispatch({ type: authConstants.DELETE_REQUEST })
+        const res = await axiosInstance.post('/Admin/deleteAdmin', id)
+
+        if (res.status === 200) {
+            toast.success("Account deleted..! ", {
+                id: 'del'
+            })
+            dispatch({ type: authConstants.DELETE_SUCCESS })
+
+        } else if (res.status === 400) {
+            toast.error("Delete Request failed..!", {
+                id: "fail"
+            })
+            dispatch({
+                type: authConstants.DELETE_FAILURE,
+
+            })
+        } else if (res.status === 500) {
+            toast.error("Server error..!", {
+                id: 'server'
+            })
+            dispatch({
+                type: authConstants.DELETE_FAILURE,
+
+            })
         }
     }
 }

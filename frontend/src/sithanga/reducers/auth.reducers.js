@@ -98,6 +98,25 @@ export default(state = initiateState,action)=> {
                 loading:false
             }
             break
+        case authConstants.DELETE_REQUEST:
+            state={
+                ...state,
+                loading:true
+            }
+            break
+        case authConstants.DELETE_SUCCESS:
+            state={
+                ...state,
+                loading:false,
+                authenticated:false
+            }
+            break
+        case authConstants.DELETE_FAILURE:
+            state={
+                ...state,
+                loading:false
+            }
+            break
     }
     return state
 }

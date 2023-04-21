@@ -94,14 +94,19 @@ const Signup = () => {
             form.append('Contact_no', conatactNo);
             form.append('Password', password);
             form.append('ProfilePicture', image);
+            const form2 ={                
+                Admin_Email: email,
+                Password: password                
+            }
 
-            dispatch(SignUp(form))
+            dispatch(SignUp(form,form2))
             setFullName('')
             setEmail('')
             setJobTitle('')
             setContactNo('')
             setPassword('')
             setImage(null)
+
         }
 
     }
@@ -111,7 +116,7 @@ const Signup = () => {
     }
 
     if (authenticated) {
-        return <Navigate to='/inquiry' />
+        return <Navigate to='/dash' />
     }
 
     return (

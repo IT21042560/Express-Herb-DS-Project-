@@ -65,17 +65,16 @@ exports.AdminRegister = async (req, res) => {
 }
 
 exports.Signin = async (req, res) => {
-  try {
-    
-    console.log(req.body.Admin_Email)
+  try {   
+    // console.log(req.body.Admin_Email)
     const RegisterdAdmin = await admin.findOne({ Admin_Email: req.body.Admin_Email });
-    console.log(RegisterdAdmin)  
+    // console.log(RegisterdAdmin)  
     if (RegisterdAdmin) {
       const enterdPwd = req.body.Password;
       const dbPwd = RegisterdAdmin.Hash_password;
       // console.log(enterdPwd,dbPwd)
       const checkPwd = await bcrypt.compare(enterdPwd, dbPwd);
-      console.log(checkPwd)
+      // console.log(checkPwd)
       if (checkPwd) {
         const token = jwt.sign({ Admin_Email: req.body.Admin_Email }, process.env.JWT_TOKEN_KEY, { expiresIn: '1h'});
         const refreshToken = jwt.sign({ Admin_Email: req.body.Admin_Email }, process.env.REFRESH_TOKEN_KEY, { expiresIn: '24h' });
@@ -163,4 +162,26 @@ exports.getAllAdmins = async (req, res) => {
     console.log(error)
   }
 
+}
+
+exports.deleteAdmin = async(req,res) => {
+  try{
+ 
+    let userId  = req.body.Admin_ID
+    const success = await admin.findOneAndDelete({Admin_ID : userId})
+    if(success){
+      res.status(200).json({
+          message:"deleted..!"
+      })
+    }
+    else{
+      res.status(400).json({
+        message:"error..!"
+      })
+    }
+  }catch{
+    res.status(500).json({
+      message:"server Error..!"
+    })
+  }
 }
