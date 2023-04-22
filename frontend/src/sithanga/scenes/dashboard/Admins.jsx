@@ -20,7 +20,10 @@ const Admins = () => {
 			<Typography variant="h4" color="#ac1717" fontWeight="600" sx={{ m: "0 0 5px 0" }}>
 				Admins
 			</Typography>
-				<Table striped bordered hover style={{ fontSize: 14, alignItems: '' }} responsive="lg" >
+				
+				{
+					admins.length > 0 ?
+					<Table striped bordered hover style={{ fontSize: 14, alignItems: '' }} responsive="lg" >
 					<thead>
 						<tr>
 							<th style={{ verticalAlign: 'middle ' }}>#</th>
@@ -50,6 +53,15 @@ const Admins = () => {
 						}
 					</tbody>
 				</Table>
+				:
+				<div>
+					<br /><br /><br /><br /><br />
+					<h3><center>NO Admins...</center></h3>
+			  	</div>
+				}
+				
+				
+				
 			</Container>
 		</div>
 	)

@@ -1,11 +1,10 @@
 import { authConstants } from './constants'
-import axiosInstance from '../helpers/axios'
+import axiosInstance from '../helpers/axiosAdmin'
 import { toast } from 'react-hot-toast'
 
 
 
 export const Login = (user) => {
-    console.log(user)
     return async (dispatch) => {
 
         dispatch({ type: authConstants.LOGIN_REQUEST })

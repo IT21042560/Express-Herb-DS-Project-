@@ -6,11 +6,7 @@ import {
   MDBCard,
   MDBCardText,
   MDBCardBody,
-  MDBCardImage,
-  MDBBtn,
-  MDBIcon,
-  MDBListGroup,
-  MDBListGroupItem
+  MDBCardImage
 } from 'mdb-react-ui-kit';
 import Swal from 'sweetalert2'
 import { deleteAdmin, isLoggedIn } from '../../actions/authActions';
@@ -22,10 +18,11 @@ import { Navigate } from 'react-router-dom';
 
 const UserProfile = () => {
 
-  const user = useSelector(state => state.auth.user.RegisterdAdmin)
+  const user = useSelector(state => state.auth.user.RegisterdAdmin);
   const authenticated = useSelector(state => state.auth.authenticated);
   const dispatch = useDispatch();
 
+  const image = user.ProfilePicture
 
   useEffect(() => {
     if (!authenticated) {
@@ -76,7 +73,7 @@ const UserProfile = () => {
               <MDBCardBody className="text-center" style={{ height: "34rem" }}>
 
                 {
-                  user.ProfilePicture === '' ?
+                  user.ProfilePicture !== '' ?
 
                     <MDBCardImage
                       src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
@@ -95,7 +92,7 @@ const UserProfile = () => {
                     // </div>
                     <div key={user.ProfilePicture}>
                       <LazyLoadImage
-                        src={`${process.env.REACT_APP_API}/${user.ProfilePicture}`}
+                        src={`${process.env.REACT_APP_API}/uploadImages/${image}`}
                         alt="profile pic"
                         className="rounded-circle"
                       />

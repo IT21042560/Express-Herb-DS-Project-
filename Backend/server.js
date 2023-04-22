@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const app = express();
-const requireSignin =require('./middleware/auth')
+
 
 
 dotenv.config();
@@ -35,8 +35,3 @@ app.use("/orderedItemRoute", orderedItemRoute);
 const completedOrderItem = require("./routes/completedOrder.js");
 app.use("/completedOrder", completedOrderItem);
 
-const admin = require('./routes/AdminRoutes.js');
-app.use("/Admin",admin);
-
-const cart = require('./routes/cartRoutes');
-app.use("/Cart",cart);
