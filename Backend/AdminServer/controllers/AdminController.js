@@ -65,7 +65,7 @@ export const AdminRegister = async (req, res) => {
 
 export const Signin = async (req, res) => {
   try {   
-    // console.log(req.body.Admin_Email)
+    console.log(req.body.Admin_Email)
     const RegisterdAdmin = await admin.findOne({ Admin_Email: req.body.Admin_Email });
     // console.log(RegisterdAdmin)  
     if (RegisterdAdmin) {
