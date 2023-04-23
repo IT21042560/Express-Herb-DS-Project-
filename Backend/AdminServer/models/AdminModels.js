@@ -15,6 +15,7 @@ const AdminSchema = new Schema({
     },
     Admin_Email:{
         type:String,
+        lowercase:true,
         required: true 
     },
     Job_title:{
