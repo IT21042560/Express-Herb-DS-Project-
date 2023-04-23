@@ -34,3 +34,10 @@ export const orderConstant ={
     GET_ORDERS_FAILURE : 'GET_ORDERS_FAILURE',
 
 }
+
+export const sellerConstant ={
+    GET_SELLER_REQUEST : 'GET_SELLER_REQUEST',
+    GET_SELLER_SUCCESS : 'GET_SELLER_SUCCESS',
+    GET_SELLER_FAILURE : 'GET_SELLER_FAILURE',
+
+}

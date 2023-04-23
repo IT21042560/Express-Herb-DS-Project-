@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Container, Table } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { Container, Table ,Nav} from 'react-bootstrap'
 import { Typography, IconButton } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrders } from '../../actions/orderActions'
@@ -15,6 +15,31 @@ const AcpOrders = () => {
   useEffect(() => {
     dispatch(getOrders())
   }, []);
+
+  //pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 8;
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = acpOrders.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(acpOrders.length / recordsPerPage);
+  const numbers = [...Array(nPage + 1).keys()].slice(1);
+
+  function nextPage() {
+    if (currentPage !== nPage) {
+      setCurrentPage(currentPage + 1)
+    }
+  }
+
+  function prePage() {
+    if (currentPage !== 1) {
+      setCurrentPage(currentPage - 1)
+    }
+  }
+
+  function changeCPage(id) {
+    setCurrentPage(id);
+  }
 
 
   return (
@@ -69,6 +94,23 @@ const AcpOrders = () => {
               <h3><center>NO Any Orders Yet...</center></h3>
             </div>
         }
+        <Nav>
+          <ul className='pagination'>
+            <li className='Nav-link'>
+              <span className='page-link' onClick={prePage}>Prev</span>
+            </li>
+            {
+              numbers.map((n, i) => (
+                <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
+                  <span className='page-link' onClick={() => changeCPage(n)}>{n}</span>
+                </li>
+              ))
+            }
+            <li className='Nav-link'>
+              <span className='page-link' onClick={nextPage}>Next</span>
+            </li>
+          </ul>
+        </Nav>
 
       </Container>
     </div>
