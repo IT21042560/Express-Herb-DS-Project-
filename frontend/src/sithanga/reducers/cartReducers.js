@@ -27,6 +27,24 @@ export default(state = init,action)=> {
                 loading: false
             }
             break;
+            case cartConstant.DELETE_CART_REQUEST:
+                state={
+                    ...state,
+                    loading: true
+                }
+                break;
+            case cartConstant.DELETE_CART_SUCCESS:
+                state={
+                    ...state,
+                    loading: false,
+                }
+                break;
+            case cartConstant.DELETE_CART_FAILED:
+                state={
+                    ...state,
+                    loading: false
+                }
+                break;
     }
     return state
 }

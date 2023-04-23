@@ -28,9 +28,21 @@ const orderItem = new Schema({
         type: String,
         required: true
     },
+    contact_no : {
+        type: String,
+        required: true
+    },
 
+    total_amount : {
+        type: String,
+        required: true
+    },
+    delivary : {
+        type: String,
+
+    },
     date : {
-        type: Date,
+        type: String,
         required: true
     }
 
