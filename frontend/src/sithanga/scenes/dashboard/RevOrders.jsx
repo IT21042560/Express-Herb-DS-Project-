@@ -17,9 +17,10 @@ const RevOrders = () => {
   useEffect(() => {
     dispatch(GetCart())
   }, []);
+
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 8;
+  const recordsPerPage = 10;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const records = carts.slice(firstIndex, lastIndex);
@@ -102,7 +103,7 @@ const RevOrders = () => {
     <div>
 
       <Container>
-        <Typography variant="h4" color="#ac1717" fontWeight="600" sx={{ m: "0 0 5px 0" }}>
+        <Typography variant="h4" color="#ac1717" fontWeight="600" sx={{ m: "-30px 0 5px 0" }}>
           Received Orders
         </Typography>
 
@@ -129,7 +130,7 @@ const RevOrders = () => {
 
               <tbody>
                 {
-                  carts.map((data, index) => (
+                  records.map((data, index) => (
                     <tr key={{ index }}>
                       <td scope="row">{index + 1}</td>
                       <td scope="row">{data.Order_ID}</td>
@@ -170,17 +171,17 @@ const RevOrders = () => {
         <Nav>
           <ul className='pagination'>
             <li className='Nav-link'>
-              <span className='page-link' onClick={prePage}>Prev</span>
+              <span className='page-link' onClick={prePage} style={{cursor:"pointer"}}>Prev</span>
             </li>
             {
               numbers.map((n, i) => (
                 <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
-                  <span className='page-link' onClick={() => changeCPage(n)}>{n}</span>
+                  <span className='page-link' onClick={() => changeCPage(n)} style={{cursor:"pointer"}}>{n}</span>
                 </li>
               ))
             }
             <li className='Nav-link'>
-              <span className='page-link' onClick={nextPage}>Next</span>
+              <span className='page-link' onClick={nextPage} style={{cursor:"pointer"}}>Next</span>
             </li>
           </ul>
         </Nav>

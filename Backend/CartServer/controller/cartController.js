@@ -1,5 +1,6 @@
 import Cart from '../models/CartModels.js'
-
+import axios from 'axios'
+import Commis from '../../CommissionServer/comModel.js'
 
 export const Addcart = async (req, res) => {
 
@@ -13,6 +14,7 @@ export const Addcart = async (req, res) => {
         const Total_Amount = req.body.Total_Amount
         const Delivary = req.body.Delivary
 
+
         const newCart = new Cart({
             Order_ID,
             Seller_ID,
@@ -25,15 +27,34 @@ export const Addcart = async (req, res) => {
         })
 
         const response = newCart.save()
-        if (response) {
-            res.status(201).json({
+        const newcommission = new Commis({
+
+            Order_ID,
+            Seller_ID,
+            Total_Amount,
+
+
+        })
+
+        const commissionResult = await axios.post('http://localhost:8044/Commission/add', newcommission);
+
+        if (response && commissionResult) {
+            res.status(200).json({
                 message: "success..!",
-                payload: newCart
+                payload: {
+                    cart: newCart,
+                    commission: newcommission
+                }
             })
         }
-        else {
+        else if(!response) {
             res.status(401).json({
-                message: "adding error..!"
+                message: "cart error..!"
+            })
+        }
+        else if(!commissionResult){
+            res.status(404).json({
+                message: "commission error..!"
             })
         }
     } catch (error) {
@@ -41,6 +62,9 @@ export const Addcart = async (req, res) => {
             message: "Server error..!"
         })
     }
+
+
+
 }
 
 export const getCart = async (req, res) => {
@@ -62,7 +86,7 @@ export const getCart = async (req, res) => {
 export const deleteCart = async (req, res) => {
     let Oid = req.body.oid
     console.log(Oid)
-    const success = await Cart.findOneAndDelete({_id : Oid})
+    const success = await Cart.findOneAndDelete({ _id: Oid })
     if (success) {
         res.status(200).json({
             message: "Delete successfull..!"

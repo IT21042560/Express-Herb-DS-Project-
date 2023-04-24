@@ -46,7 +46,7 @@ const Admins = () => {
 				</Typography>
 
 				{
-					admins.length > 0 ?
+					records.length > 0 ?
 						<Table striped bordered hover style={{ fontSize: 14, alignItems: '' }} responsive="lg" >
 							<thead>
 								<tr>
@@ -86,17 +86,17 @@ const Admins = () => {
 				<Nav>
 					<ul className='pagination'>
 						<li className='Nav-link'>
-							<span className='page-link' onClick={prePage}>Prev</span>
+							<span className='page-link' onClick={prePage} style={{cursor:"pointer"}}>Prev</span>
 						</li>
 						{
 							numbers.map((n, i) => (
 								<li className={`page-item ${currentPage === n ? 'active' : ''}`} key={i}>
-									<span className='page-link' onClick={() => changeCPage(n)}>{n}</span>
+									<span className='page-link' onClick={() => changeCPage(n)} style={{cursor:"pointer"}}>{n}</span>
 								</li>
 							))
 						}
 						<li className='Nav-link'>
-							<span className='page-link' onClick={nextPage}>Next</span>
+							<span className='page-link' onClick={nextPage} style={{cursor:"pointer"}}>Next</span>
 						</li>
 					</ul>
 				</Nav>

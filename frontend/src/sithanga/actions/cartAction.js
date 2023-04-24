@@ -29,7 +29,7 @@ export const deleteCart = (id) => {
         dispatch({ type: cartConstant.DELETE_CART_REQUEST})
         const res = await axiosIntance.post('/Cart/deletecart',id)
         if (res.status === 200) {
-            toast.success("Order rejected..! ", {
+            toast.success("Order deleted..! ", {
                 id: 'del'
             })
             dispatch({ type:  cartConstant.DELETE_CART_SUCCESS })

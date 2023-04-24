@@ -32,6 +32,7 @@ const CartSchema = new Schema({
         type: String,
         required: true,
     },
+
     Delivary: {
         type: String,
         required: true,
