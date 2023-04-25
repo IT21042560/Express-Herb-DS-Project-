@@ -2,6 +2,7 @@ import authReducers from "./auth.reducers";
 import cartReducers from "./cartReducers";
 import orderReducers from './order.Reducer';
 import sellerReducers from "./seller.reducers";
+import commissionConstant from './com.reducers'
 import {combineReducers} from'redux'
 
 const rootReducer = combineReducers({
@@ -9,6 +10,7 @@ const rootReducer = combineReducers({
     cart:cartReducers,
     order:orderReducers,
     seller:sellerReducers,
+    commission :commissionConstant,
 
 })
 

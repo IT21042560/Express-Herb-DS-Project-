@@ -39,3 +39,18 @@ export const addCommission = async (req, res) => {
     }
 }
 
+export const getAll =async (req,res) => {
+
+    const commissions = await commis.find()
+    if(commissions){
+        res.status(201).json({
+            message:"Success..!!",
+            payload:commissions
+        })
+    }else{
+        res.status(400).json({
+            message:"Error...!"
+        })
+    }
+}
+

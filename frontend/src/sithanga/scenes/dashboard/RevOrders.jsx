@@ -47,7 +47,6 @@ const RevOrders = () => {
   const AcceptOrder = (data) => {
 
     const form = {
-      oid: data._id,
       order_id: data.Order_ID,
       customer_name: data.Customer_Name,
       address: data.Address,
@@ -77,11 +76,6 @@ const RevOrders = () => {
   }
 
   const rejectOrder = (id) => {
-    console.log(id)
-
-    const form = {
-      oid: id
-    }
 
     Swal.fire({
       title: 'Are you sure want to Delete this Order?',
@@ -94,7 +88,7 @@ const RevOrders = () => {
 
     }).then(async (result) => {
       if (result.isConfirmed) {
-        dispatch(deleteCart(form))
+        dispatch(deleteCart(id))
       }
     })
   }
@@ -147,7 +141,7 @@ const RevOrders = () => {
                           <IconButton onClick={(e) => { AcceptOrder(data) }}>
                             <FileDownloadDoneRoundedIcon size={20} style={{ color: "blue", height: "1.2rem" }} />
                           </IconButton>
-                          <IconButton onClick={(e) => { rejectOrder(data._id) }}>
+                          <IconButton onClick={(e) => { rejectOrder(data) }}>
                             <CancelOutlinedIcon size={20} style={{ color: "red", height: "1.2rem" }} />
                           </IconButton>
 

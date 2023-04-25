@@ -65,7 +65,7 @@ const navItems = [
         icon: null,
     },
     {
-        text: "Our Group",
+        text: "Team",
         icon: <PeopleAltOutlinedIcon />,
     }
 ];

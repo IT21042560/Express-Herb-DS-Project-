@@ -1,48 +1,107 @@
 const router = require("express").Router();
 const nodemailer = require('nodemailer');
 const {EMAIL, PASSWORD} = require('./env.js');
-const Mailge = require('mailgen');
 let OrderedItem = require("../moduls/orderedItems");
 const Mailgen = require("mailgen");
 const moment = require("moment")
+const tls = require('tls');
+const fs = require('fs');
+const axios = require('axios')
 
-router.route("/add").post((req,res) => {
-    const Dates = req.body.date;
-    const formatedDate = moment(Dates).format("DD/DD/YYYY, h:mm a z")
 
-    const order_id = req.body.order_id;
-    const customer_name = req.body.customer_name;
-    const address = req.body.address;
-    const email = req.body.email;
-    const status = req.body.status;
-    const contact_no = req.body.contact_no
-    const total_amount = req.body.total_amount;
-    const delivary = req.body.delivary;
-    const date = formatedDate;
-        
-    const newItem = new OrderedItem({
-        
-        order_id,
-        customer_name,
-        address,
-        email,
-        status,
-        contact_no,
-        total_amount,
-        delivary,
-        date
-        
-    })
+router.route("/add").post(async(req,res) => {
+    try{
 
-    newItem.save().then(()=>{
-        res.status(200).json({
-            message:`${order_id} added to the order tracking system `,
-            payload:newItem
+        // console.log(req.body)
+        const Dates = req.body.date;
+        const formatedDate = moment(Dates).format("DD/DD/YYYY, h:mm a z")
+    
+        const order_id = req.body.order_id;
+        const customer_name = req.body.customer_name;
+        const address = req.body.address;
+        const email = req.body.email;
+        const status = req.body.status;
+        const contact_no = req.body.contact_no
+        const total_amount = req.body.total_amount;
+        const delivary = req.body.delivary;
+        const date = formatedDate;
+            
+        const newItem = new OrderedItem({
+            
+            order_id,
+            customer_name,
+            address,
+            email,
+            status,
+            contact_no,
+            total_amount,
+            delivary,
+            date
             
         })
-    }).catch((err) => {
-        console.log(err);
-    })
+        //send mail when admin accept the order
+    
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            auth: {
+                user: EMAIL,
+                pass: PASSWORD
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+        
+        const mailOptions = {
+            from: EMAIL,
+            to: email,
+            subject: 'Your Order has been accepted..!',
+            text: `Dear ${customer_name},\n\nWe are pleased to inform you that your recent order on our iHerb website has been checked and accepted. We appreciate your business and hope to continue serving you with the highest quality products and services.\n\nOrder summary\n\nOrder ID : ${order_id}\nCustomer Name: ${customer_name}\nAddress: ${address}\nTotal Amount: ${total_amount}\n\n\nThank you for choosing our website.\n\nBest regards,\nThe iHerb team`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+    
+        // new item add to the order list and remove from the cart
+        const addRes = newItem.save();
+        console.log(addRes)
+        const form ={
+            oid :order_id
+        }
+    
+        const deleteRes = await axios.post('http://localhost:8042/Cart/deleteCart',form);
+        if(addRes && deleteRes ){
+            res.status(201).json({
+                message: `${order_id} added to the order tracking system `,
+                payload:{addRes}
+            })
+        }else if(!addRes){
+            res.status(404).json({
+                message:"error occur in Data saving...!"
+            })
+        }else if(!deleteRes){
+            res.status(400).json({
+                message:"error occur in Data deleting from the cart...!"
+            })
+        }
+    }catch(error){
+        res.status(500).json({
+            message:"server error..!"
+        })
+    }
+    
+    
+    
+    
+    
+    
 
 })
 

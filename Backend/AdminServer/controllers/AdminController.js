@@ -76,7 +76,7 @@ export const Signin = async (req, res) => {
       // console.log(checkPwd)
       if (checkPwd) {
         const token = jwt.sign({ Admin_Email: req.body.Admin_Email }, process.env.JWT_TOKEN_KEY, { expiresIn: '1h'});
-        const refreshToken = jwt.sign({ Admin_Email: req.body.Admin_Email }, process.env.REFRESH_TOKEN_KEY, { expiresIn: '24h' });
+        const refreshToken = jwt.sign({ Admin_Email: req.body.Admin_Email }, process.env.REFRESH_TOKEN_KEY, { expiresIn: '5h' });
         // console.log("token  "+token)
         // console.log("refresh token    "+refreshToken)
         refreshtokens.push(refreshToken);

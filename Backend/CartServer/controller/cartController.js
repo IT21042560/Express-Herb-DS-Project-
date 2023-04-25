@@ -1,11 +1,17 @@
 import Cart from '../models/CartModels.js'
 import axios from 'axios'
-import Commis from '../../CommissionServer/comModel.js'
+import nodemailer from 'nodemailer'
+import tls from 'tls'
+import fs from 'fs'
+
+
 
 export const Addcart = async (req, res) => {
 
     try {
-        const Order_ID = req.body.Order_ID
+        const prefix = 'OID'
+        const order_ID = (prefix + Date.now())
+        const Order_ID = order_ID
         const Seller_ID = req.body.Seller_ID
         const Customer_Name = req.body.Customer_Name
         const Address = req.body.Address
@@ -13,7 +19,6 @@ export const Addcart = async (req, res) => {
         const Email = req.body.Email
         const Total_Amount = req.body.Total_Amount
         const Delivary = req.body.Delivary
-
 
         const newCart = new Cart({
             Order_ID,
@@ -27,36 +32,21 @@ export const Addcart = async (req, res) => {
         })
 
         const response = newCart.save()
-        const newcommission = new Commis({
-
-            Order_ID,
-            Seller_ID,
-            Total_Amount,
-
-
-        })
-
-        const commissionResult = await axios.post('http://localhost:8044/Commission/add', newcommission);
-
-        if (response && commissionResult) {
+        if (response) {
             res.status(200).json({
                 message: "success..!",
                 payload: {
-                    cart: newCart,
-                    commission: newcommission
+                    cart: newCart
+
                 }
             })
         }
-        else if(!response) {
+        else{
             res.status(401).json({
                 message: "cart error..!"
             })
         }
-        else if(!commissionResult){
-            res.status(404).json({
-                message: "commission error..!"
-            })
-        }
+
     } catch (error) {
         res.status(500).json({
             message: "Server error..!"
@@ -69,7 +59,7 @@ export const Addcart = async (req, res) => {
 
 export const getCart = async (req, res) => {
 
-    const allCart = await Cart.find();
+    const allCart = await Cart.find().sort({date: -1});
     if (allCart) {
         res.status(200).json({
             message: "Fetched Successfully..!",
@@ -85,16 +75,79 @@ export const getCart = async (req, res) => {
 
 export const deleteCart = async (req, res) => {
     let Oid = req.body.oid
-    console.log(Oid)
-    const success = await Cart.findOneAndDelete({ _id: Oid })
-    if (success) {
-        res.status(200).json({
-            message: "Delete successfull..!"
-        })
+    try{
 
-    } else {
-        res.status(400).json({
-            message: "Delete unsuccessfull..!"
+        const success = await Cart.findOneAndDelete({ Order_ID : Oid })
+        if (success) {
+            res.status(200).json({
+                message: "Delete successfull..!"
+            })
+    
+        } else {
+            res.status(400).json({
+                message: "Delete unsuccessfull..!"
+            })
+        }
+    }catch(error){
+        res.status(500).json({
+            message:"server error..!"
+        })
+    }
+
+
+
+}
+// this is for mails
+export const deleteCartM = async (req, res) => {
+    console.log(req.body)
+    let Oid = req.body.oid
+    const customer_name =req.body.Customer_Name
+    const Email = req.body.email
+    try{
+
+        const success = await Cart.findOneAndDelete({ Order_ID : Oid })
+
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            auth: {
+                user: 'webinctechnology@gmail.com',
+                pass: 'dvymzjhgvxgyhpzg'
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+        
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: Email,
+            subject: 'Your Order has been rejected..!',
+            text: `Dear ${customer_name},\n\nWe regret to inform you that we are unable to process your recent order(order id is ${Oid}) at this time due to some reason of our company. We apologize for any inconvenience this may have caused you.\n\nIf you have any questions or concerns, please contact our customer support team at [011-2456895].\n\nThank you for your understanding.\n\nBest regards,\nThe iHerb team`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
+        if (success) {
+            res.status(200).json({
+                message: "Delete successfull..!"
+            })
+    
+        } else {
+            res.status(400).json({
+                message: "Delete unsuccessfull..!"
+            })
+        }
+    }catch(error){
+        res.status(500).json({
+            message:"server error..!"
         })
     }
 

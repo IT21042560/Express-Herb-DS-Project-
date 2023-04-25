@@ -72,7 +72,7 @@ function App() {
             <Route path='/accepted orders' element={<AcpOrders />} />
             <Route path='/sellers' element={<Sellers />} />
             <Route path='/commisions' element={<Commision />} />
-            <Route path='/Our Group' element={<Admins />} />
+            <Route path='/Team' element={<Admins />} />
            
           </Route>
 

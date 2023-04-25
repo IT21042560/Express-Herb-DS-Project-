@@ -14,8 +14,8 @@ const Selleres = () => {
     dispatch(getAllSellers())
   }, []);
 
-  const hello = () => {
-    console.log("hello")
+  const sellerDetails = (id) => {
+    console.log(id)
   }
 
 
@@ -68,7 +68,7 @@ const Selleres = () => {
               <tbody>
                 {
                   records.map((data, index) => (
-                    <tr key={{ index }} onClick={(e) => { hello() }} style={{ cursor: "pointer" }}>
+                    <tr key={{ index }} onClick={(e) => { sellerDetails(data.Seller_Id) }} style={{ cursor: "pointer" }}>
                       <td scope="row">{index + 1}</td>
                       <td scope="row">{data.Seller_Id}</td>
                       <td scope="row">{data.FirstName}</td>
