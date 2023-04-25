@@ -20,6 +20,7 @@ export const Addcart = async (req, res) => {
         const Total_Amount = req.body.Total_Amount
         const Delivary = req.body.Delivary
 
+
         const newCart = new Cart({
             Order_ID,
             Seller_ID,
