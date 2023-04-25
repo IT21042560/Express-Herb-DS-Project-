@@ -73,7 +73,7 @@ const UserProfile = () => {
               <MDBCardBody className="text-center" style={{ height: "34rem" }}>
 
                 {
-                  user.ProfilePicture !== '' ?
+                  user.ProfilePicture == '' ?
 
                     <MDBCardImage
                       src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
@@ -92,7 +92,7 @@ const UserProfile = () => {
                     // </div>
                     <div key={user.ProfilePicture}>
                       <LazyLoadImage
-                        src={`${process.env.REACT_APP_API}/uploadImages/${image}`}
+                        src={`${process.env.REACT_APP_API}/${image}`}
                         alt="profile pic"
                         className="rounded-circle"
                       />
