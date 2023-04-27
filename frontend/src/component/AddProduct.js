@@ -1,38 +1,63 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-export default function AddProduct() {
+// let email="jjj@gmail.com";
+// // export const getEmail=(Email)=>{
+// // console.log("Email" + Email)
+// // email=Email;
+
+// //}
+// export function getEmaill(props) {
+//   email = props;
+//   console.log(email);
+// }
+
+export const AddProduct = () => {
+  const { id } = useParams();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [catogory, setCatogory] = useState("");
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [image, setImage] = useState("");
+
+  const handleCatImg = (e) => {
+    setImage(e.target.files[0]);
+  };
 
   function sendData(e) {
     e.preventDefault();
-    const newProduct = {
-      name,
-      price,
-      catogory,
-      description,
-      quantity,
-    };
-    
-      axios
-        .post("http://localhost:8040/Product/addProduct", newProduct)
-        .then(() => {
-          alert("Product added");
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    
+    // const newProduct = {
+    //   name,
+    //   price,
+    //   catogory,
+    //   description,
+    //   quantity,
+    //   id,
+    //   image,
+    // };
+    const form = new FormData();
+    form.append("name", name);
+    form.append("price", price);
+    form.append("catogory", catogory);
+    form.append("description", description);
+    form.append("quantity", quantity);
+    form.append("SellerId", id);
+    form.append("image", image);
+    console.log(id);
+    axios
+      .post(`http://localhost:8040/Product/addProduct/${id}`, form)
+      .then(() => {
+        alert("Product added");
+      })
+      .catch((err) => {
+        alert(err);
+      });
   }
 
   return (
     <div className="icc">
-      
       <div className="container">
         <div className="border">
           <div className="col-md-8 mt-4 mx-auto"></div>
@@ -107,7 +132,21 @@ export default function AddProduct() {
                 }}
               />
             </div>
-            
+            <div className="mb-3 ">
+              <label for="gender" className="form-label">
+                Image
+              </label>
+              <input
+                type="file"
+                className="form-control"
+                id="image"
+                placeholder=""
+                onChange={(e) => {
+                  handleCatImg(e);
+                }}
+              />
+            </div>
+
             <button
               type="submit"
               className="btn btn-success"
@@ -115,7 +154,7 @@ export default function AddProduct() {
             >
               Submit
             </button>
-            <Link to="/ViewProduct">
+            <Link to={"/ViewProduct/" + id}>
               <button className="btn btn-danger" style={{}}>
                 Back
               </button>
@@ -123,7 +162,7 @@ export default function AddProduct() {
           </form>
         </div>
       </div>
-     
     </div>
   );
-}
+};
+//export getEmail=getEmail;

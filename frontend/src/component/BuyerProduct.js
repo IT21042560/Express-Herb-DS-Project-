@@ -2,17 +2,19 @@ import React, { useState, useEffect } from "react";
 import axois from "axios";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { MDBCardImage } from "mdb-react-ui-kit";
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { Button } from "@mui/material";
 
 export default function BuyerProduct() {
   const [Product, setProduct] = useState([]);
+  const image = Product.image;
 
   useEffect(() => {
     function getProduct() {
       axois
-        .get("http://localhost:8040/Product/viewProducts")
+        .get("http://localhost:8040/Product/viewAll")
         .then((res) => {
           console.log(res.data);
           setProduct(res.data);
@@ -47,19 +49,38 @@ export default function BuyerProduct() {
         className="table"
         style={{ marginTop: "40px", width: "1200px", marginLeft: "200px" }}
       >
+        <thead>
+          {Product && (
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Price </th>
+              <th scope="col">Catogory</th>
+              <th scope="col">description</th>
+              <th scope="col">quantity </th>
+              <th scope="col">image </th>
+              {/* {e.quantity}<br></br> */}
+            </tr>
+          )}
+        </thead>
         <tbody>
           {Product &&
             Product.map((e, i) => (
-              
+              <tr>
+                <td>{e.name}</td>
+                <td>{e.price}</td>
+                <td>{e.catogory}</td>
+                <td>{e.description}</td>
+                <td>{e.quantity}</td>
                 <td>
-                  {e.name}<br></br>
-                  Product Price<br></br>
-                  {e.price}<br></br>
-                  {e.catogory}<br></br>
-                  {e.description}<br></br>
-                  {/* {e.quantity}<br></br> */}
+                  <MDBCardImage
+                    src={`http://localhost:8040/${e.image}`}
+                    alt="Avatar"
+                    className="my-5"
+                    style={{ width: "80px" }}
+                    fluid
+                  />
                 </td>
-              
+              </tr>
             ))}
         </tbody>
       </table>

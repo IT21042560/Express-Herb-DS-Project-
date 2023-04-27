@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axois from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { Card, CardMedia } from "@mui/material";
 import axios from "axios";
+import { MDBCardImage } from "mdb-react-ui-kit";
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { Button } from "@mui/material";
 
 export default function ViewProduct() {
+  const { id } = useParams();
   const [Product, setProduct] = useState([]);
+  //const image = Product[0].image;
+  console.log(Product)
 
   useEffect(() => {
     function getProduct() {
       axois
-        .get("http://localhost:8040/Product/viewProducts")
+        .get(`http://localhost:8040/Product/viewProducts/${id}`)
         .then((res) => {
           console.log(res.data);
           setProduct(res.data);
@@ -69,6 +74,7 @@ export default function ViewProduct() {
               <th scope="col">Catogory</th>
               <th scope="col">description</th>
               <th scope="col">quantity </th>
+              <th scope="col">image </th>
               <th></th>
               <th></th>
             </tr>
@@ -84,6 +90,17 @@ export default function ViewProduct() {
                 <td>{e.catogory}</td>
                 <td>{e.description}</td>
                 <td>{e.quantity}</td>
+                {/* <td><Card sx={{height: "50%"}}>
+                  <CardMedia component="img" height="auto" image={e.images[0].url}></CardMedia></Card></td> */}
+                <td>
+                  <MDBCardImage
+                    src={`http://localhost:8040/${e.image}`}
+                    alt="Avatar"
+                    className="my-5"
+                    style={{ width: "80px" }}
+                    fluid
+                  />
+                </td>
                 {/* <td className="middle">
                                     <button className="up_pur" >Update</button> */}
                 <td>
@@ -114,7 +131,7 @@ export default function ViewProduct() {
         </tbody>
       </table>
       <div className="buttons">
-        <Link to="/AddProduct">
+        <Link to={"/AddProduct/" + id}>
           <center>
             <button
               type="button2"
