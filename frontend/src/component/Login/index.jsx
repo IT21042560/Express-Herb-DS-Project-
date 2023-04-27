@@ -3,10 +3,15 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
 import { Navigate } from "react-router-dom";
+import {useDispatch} from "react-redux"
+import { getEmaill } from "../AddProduct";
+import { AddProduct } from "../AddProduct";
 
 const Login = () => {
+	const dispatch=useDispatch
 	const [data, setData] = useState({ Email: "", Hash_password: "" });
 	const [error, setError] = useState("");
+	
 
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value });
@@ -17,14 +22,22 @@ const Login = () => {
 		e.preventDefault();
 		try {
 			const url = "http://localhost:8050/seller/Signin";
-			const url1 = "http://localhost:8040/Product/addEmail";
+			
+
 			const { data: res } = await axios.post(url, data);
-			const { data: res1 } = await axios.post(url1, data);
-			//await axios.post(url1, data.Email);
+			
+			//const Email =res.payload.RegisterdSeller.Email
+			const userId = res.payload.RegisterdSeller.Seller_Id;
+
+			//dispatch(getEmail(Email))
+			console.log("hiiiiiiiiiiiii")
+			
+			//getEmaill(Email);
 			localStorage.setItem("token", res.data);
-			localStorage.setItem("token", res1.data);
-			window.location = "/Home";
-			// Navigate("../Home")
+			
+			window.location = `/SellerProfile/${userId}`;
+			
+			
 
 
 		} catch (error) {
@@ -62,6 +75,7 @@ const Login = () => {
 							required
 							className={styles.input}
 						/>
+						{/* <AddProduct email1={data.Email}/> */}
 						{error && <div className={styles.error_msg}>{error}</div>}
 						<button type="submit" className={styles.green_btn}>
 							Sing In
@@ -70,7 +84,7 @@ const Login = () => {
 				</div>
 				<div className={styles.right}>
 					<h1>New Here ?</h1>
-					<Link to="/signup">
+					<Link to={"/signup1"}>
 						<button type="button" className={styles.white_btn}>
 							Sing Up
 						</button>
