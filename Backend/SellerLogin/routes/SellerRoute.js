@@ -5,6 +5,7 @@ const {
   Signout,
   tokenRefresh,
   getAllSeller,
+  getOneSeller,
 } = require("../controllers/SellerController");
 //const requireSignin = require('../middleware/auth.js')
 const multer = require("multer");
@@ -18,6 +19,7 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(null, Date.now() + "_" + file.originalname);
   },
+  
 });
 
 const upload = multer({ storage });
@@ -27,5 +29,6 @@ router.post("/Signin", Signin);
 router.delete("/Signout", Signout);
 router.post("/Token", tokenRefresh);
 router.get("/seller", getAllSeller);
+router.get("/seller/:id", getOneSeller);
 
 module.exports = router;

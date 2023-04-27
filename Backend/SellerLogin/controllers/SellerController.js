@@ -56,7 +56,7 @@ exports.Signin = async (req, res) => {
   try {
     const RegisterdSeller = await Seller.findOne({ Email: req.body.Email });
     console.log(RegisterdSeller);
-    x=RegisterdSeller;
+    x = RegisterdSeller;
     if (RegisterdSeller) {
       const enterdPwd = req.body.Hash_password;
       const dbPwd = RegisterdSeller.Hash_password;
@@ -161,4 +161,16 @@ exports.getAllSeller = async (req, res) => {
     console.log(error);
   }
 };
-exports.RegisterdSeller=x;
+exports.getOneSeller = async (req, res) => {
+  let Seller_Id = req.params.Seller_Id;
+  const RegisterdSeller = await Seller.findOne({
+    Seller_Id: req.params.id,
+  });
+
+  res.status(201).json({
+    // mesage: "Login Successfull..!",
+    // payload: { RegisterdSeller },
+    RegisterdSeller,
+  });
+};
+exports.RegisterdSeller = x;
