@@ -1,45 +1,56 @@
-const router = require("express").Router();
-var express = require("express");
-let Product = require("../models/Product");
-let ss = require("../../SellerLogin/controllers/SellerController")
-const ObjectID = require("mongodb").ObjectId;
-var multer = require("multer");
-var fs = require("fs");
-var path = require("path");
+import express from "express";
+const router = express.Router();
+import Product from "../models/Product.js";
+//let ss = require("../../SellerLogin/controllers/SellerController");
+//const ObjectID = require("mongodb").ObjectId;
+import multer from "multer";
+import fs from "fs";
+import path from "path";
 var app = express();
+import asyncHandler from "express-async-handler";
+
 
 let x;
 
+// var storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "uploads");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "-" + Date.now());
+//   },
+// });
 
-var storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now());
-  },
-});
+// var upload = multer({ storage: storage });
+// const prefix = "SID";
+// const S_ID = prefix + Date.now();
 
-var upload = multer({ storage: storage });
-const prefix = "SID";
-const S_ID = prefix + Date.now();
-
-const addProduct = async (req, res) => {
-  const Email = x;
+export const addProduct = async (req, res) => {
+  let userId1 = req.params.id;
+  //const Email = req.body.Email;
+  let file = "N/A";
+  if (req.file) {
+    file = req.file.filename;
+  }
   const name = req.body.name;
-  const price = Number(req.body.price);
+  const price = req.body.price;
   const catogory = req.body.catogory;
   const description = req.body.description;
-  const quantity = Number(req.body.quantity);
+  const quantity = req.body.quantity;
+  const SellerId = userId1;
+  console.log(req.body);
 
   const newProduct = new Product({
-    Email,
+    //Email,
     name,
     price,
     catogory,
     description,
     quantity,
+    SellerId,
+    image: file,
   });
+  console.log(newProduct);
   newProduct
     .save()
     .then(() => {
@@ -49,29 +60,42 @@ const addProduct = async (req, res) => {
       console.log(err);
     });
 };
-const addEmail = async (req, res) => {
- const Email =req.body.Email;
- x=Email
- console.log(Email)
+// // const addEmail = async (req, res) => {
+// //   const Email = req.body.Email;
+// //   x=Email
+// //    console.log(x);
 
-  const newProduct = new Product({
-    Email,
-  });
-  newProduct
-    .save()
-    .then(() => {
-      res.json("Email Added");
+// //    const newProduct = new Product({
+// //     Email,
+// //   });
+
+//   newProduct
+//     .updateOne({Email:Email})
+//     .then(() => {
+//       res.json("Email Added");
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+//  };
+
+export const viewProducts = async (req, res, next) => {
+  let userId1 = req.params.id;
+  await Product.find({ SellerId: userId1 })
+    .then((Product) => {
+      res.json(Product);
+      //console.log(x);
+      //res.status(200).json(response);
     })
     .catch((err) => {
       console.log(err);
     });
 };
-
-const viewProducts = async (req, res, next) => {
+export const viewAll = async (req, res, next) => {
   await Product.find()
     .then((Product) => {
       res.json(Product);
-      console.log(x)
+      //console.log(x);
       //res.status(200).json(response);
     })
     .catch((err) => {
@@ -79,7 +103,7 @@ const viewProducts = async (req, res, next) => {
     });
 };
 
-const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res) => {
   let userId = req.params.id;
   // const name = req.body.name;
   const { name, price, catogory, description, quantity } = req.body;
@@ -104,7 +128,38 @@ const updateProduct = async (req, res) => {
 
   // return res.status(201).json({updateDrivers })
 };
-const deleteProduct = async (req, res) => {
+// const uploadImages = asyncHandler(async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const uploader = (path) => cloudinaryUploadImg(path, "images");
+
+//     const url = [];
+//     const files = req.files;
+
+//     for (const file of files) {
+//       const { path } = file;
+//       console.log(path);
+//       const newpath = await uploader(path);
+//       console.log(newpath);
+//       url.push(newpath);
+//     }
+//     const findProduct = await Product.findByIdAndUpdate(
+//       id,
+//       {
+//         images: url.map((file) => {
+//           return file;
+//         }),
+//       },
+//       {
+//         new: true,
+//       }
+//     );
+//     res.json(findProduct);
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// });
+export const deleteProduct = async (req, res) => {
   let userId = req.params.id;
   await Product.findByIdAndDelete(userId)
     .then(() => {
@@ -118,7 +173,7 @@ const deleteProduct = async (req, res) => {
     });
 };
 
-const getProductById = async (req, res) => {
+export const getProductById = async (req, res) => {
   let id = req.params.id;
   await Product.findById(id)
     .then((response) => {
@@ -132,10 +187,20 @@ const getProductById = async (req, res) => {
     });
 };
 
-exports.addProduct = addProduct;
-exports.viewProducts = viewProducts;
-exports.updateProduct = updateProduct;
-exports.deleteProduct = deleteProduct;
-exports.getProductById = getProductById;
-exports.addEmail = addEmail;
+// exports.addProduct = addProduct;
+// exports.viewProducts = viewProducts;
+// exports.updateProduct = updateProduct;
+// exports.deleteProduct = deleteProduct;
+// exports.getProductById = getProductById;
+// exports.viewAll = viewAll;
+// exports.uploadImages = uploadImages;
+// module.exports = {
+//   addProduct,
+//   viewProducts,
+//   updateProduct,
+//   deleteProduct,
+//   getProductById,
+//   viewAll,
+//   uploadImages,
+// };
 //module.exports= router;

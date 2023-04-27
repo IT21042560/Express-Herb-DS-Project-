@@ -1,13 +1,19 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const dotenv = require("dotenv");
+import express from "express";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import cors from "cors";
+import dotenv from "dotenv";
 const app = express();
+import path from "path";
+import { fileURLToPath } from "url";
 
-require("dotenv").config();
+const filePath = fileURLToPath(import.meta.url);
+const dirName = path.dirname(filePath);
+
+dotenv.config();
 
 const PORT = process.env.PORT || 8040;
+app.use(express.static(path.join(dirName, "uploads")));
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -27,7 +33,5 @@ app.listen(PORT, () => {
 // const product = require("./routes/Product-routes");
 // app.use('/Product', product);
 
-const product = require("./routes/Product-Route");
+import product from "./routes/Product-Route.js";
 app.use("/Product", product);
-
-
